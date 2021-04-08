@@ -45,7 +45,6 @@ const checkVinNumberValid = (req, res, next) => {
 const checkVinNumberUnique = (req, res, next) => {
   const { vin } = req.body;
   getByVin(vin).then((numOfVins) => {
-    console.log("middlware", numOfVins);
     if (numOfVins) {
       res.status(400).json({ message: `vin ${vin} already exists` });
     } else {

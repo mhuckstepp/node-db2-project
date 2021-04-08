@@ -39,7 +39,6 @@ router.post(
 
 // eslint-disable-next-line
 router.use((err, req, res, next) => {
-  // CALL next(err) IF THE PROMISE REJECTS INSIDE YOUR ENDPOINTS
   res.status(500).json({
     message: "something went wrong inside the car router",
     errMessage: err.message,
