@@ -14,11 +14,9 @@ const create = async (car) => {
 };
 
 const getByVin = async (testVin) => {
-  const counter = await db("cars").count("vin").where({ vin: testVin });
-  console.log(counter);
-  const checker = counter[0]["count(`vin`)"];
-  console.log(checker);
-  return checker;
+  const counterResult = await db("cars").count("vin").where({ vin: testVin });
+  const counter = counterResult[0]["count(`vin`)"];
+  return counter;
 };
 
 module.exports = { getAll, getById, create, getByVin };

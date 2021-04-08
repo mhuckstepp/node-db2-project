@@ -1,4 +1,3 @@
-const { restart } = require("nodemon");
 const { getById, getByVin } = require("./cars-model");
 var vinValidator = require("vin-validator");
 
