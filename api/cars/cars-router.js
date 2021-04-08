@@ -1,6 +1,11 @@
 const router = require("express").Router();
-const { getAll, getById, create } = require("./cars-model");
-const { checkCarId } = require("./cars-middleware");
+const { getAll, create } = require("./cars-model");
+const {
+  checkCarId,
+  checkCarPayload,
+  checkVinNumberValid,
+  checkVinNumberUnique,
+} = require("./cars-middleware");
 
 router.get("/", (req, res, next) => {
   getAll()
@@ -16,9 +21,21 @@ router.get("/:id", checkCarId, (req, res, next) => {
   res.status(200).json(req.body.car);
 });
 
-router.post("/", (req, res, next) => {
-  res.status(200).json(req.body);
-});
+router.post(
+  "/",
+  checkCarPayload,
+  checkVinNumberValid,
+  checkVinNumberUnique,
+  (req, res, next) => {
+    create(req.body)
+      .then((car) => {
+        res.status(201).json(car);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
+);
 
 // eslint-disable-next-line
 router.use((err, req, res, next) => {

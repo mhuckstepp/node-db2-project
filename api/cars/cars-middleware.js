@@ -1,5 +1,5 @@
 const { restart } = require("nodemon");
-const { getById } = require("./cars-model");
+const { getById, getByVin } = require("./cars-model");
 var vinValidator = require("vin-validator");
 
 const checkCarId = (req, res, next) => {
@@ -35,16 +35,24 @@ const checkCarPayload = (req, res, next) => {
 
 const checkVinNumberValid = (req, res, next) => {
   const { vin } = req.body;
-  const isValidVin = vinValidator(vin);
+  const isValidVin = vinValidator.validate(vin);
   if (isValidVin) {
     next();
   } else {
-    res.status(400).json(` { message: "vin ${vin} is invalid" }`);
+    res.status(400).json({ message: `vin ${vin} is invalid` });
   }
 };
 
 const checkVinNumberUnique = (req, res, next) => {
-  // DO YOUR MAGIC
+  const { vin } = req.body;
+  getByVin(vin).then((numOfVins) => {
+    console.log("middlware", numOfVins);
+    if (numOfVins) {
+      res.status(400).json({ message: `vin ${vin} already exists` });
+    } else {
+      next();
+    }
+  });
 };
 
 module.exports = {
